@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المختبر الافتراضي | الخصائص الفيزيائية للمواد الأيونية والتساهمية والفلزية - Fouad EduLab</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#1B2640;
+  --navy-light:#24315400;
+  --navy-card:#22304f;
+  --teal:#14c8a8;
+  --teal-dark:#1F8A8C;
+  --warn:#ffb84d;
+  --danger:#ff5c5c;
+  --text:#eaf1f7;
+  --muted:#9fb0c7;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0;
+  font-family:'Cairo',sans-serif;
+  background:linear-gradient(160deg,#141b2e,#1B2640 60%,#16213a);
+  color:var(--text);
+  min-height:100vh;
+}
+header{
+  padding:28px 20px 18px;
+  text-align:center;
+  border-bottom:2px solid rgba(20,200,168,.25);
+  background:rgba(0,0,0,.15);
+}
+.brand{
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  background:var(--teal);
+  color:#0c1a22;
+  font-weight:900;
+  padding:6px 16px;
+  border-radius:30px;
+  font-size:14px;
+  margin-bottom:14px;
+}
+h1{margin:6px 0;font-size:clamp(20px,3vw,30px);color:#fff;}
+.subtitle{color:var(--muted);font-size:15px;max-width:760px;margin:8px auto 0;}
+.level-toggle{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+.level-btn{
+  background:transparent;
+  border:2px solid var(--teal-dark);
+  color:var(--text);
+  padding:8px 18px;
+  border-radius:24px;
+  cursor:pointer;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  transition:.2s;
+}
+.level-btn.active{background:var(--teal);color:#0c1a22;border-color:var(--teal);}
+
+.safety-bar{
+  background:rgba(255,92,92,.12);
+  border:1px solid var(--danger);
+  border-radius:12px;
+  margin:20px auto;
+  max-width:1100px;
+  padding:14px 18px;
+  display:flex;
+  align-items:flex-start;
+  gap:12px;
+}
+.safety-bar .icon{font-size:24px;}
+.safety-bar ul{margin:6px 0 0;padding-inline-start:20px;font-size:13.5px;color:#ffd6d6;line-height:1.9;}
+
+main{max-width:1150px;margin:0 auto;padding:10px 16px 60px;}
+
+.tabs{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:center;
+  margin:24px 0;
+}
+.tab{
+  background:var(--navy-card);
+  border:1px solid rgba(20,200,168,.25);
+  color:var(--text);
+  padding:12px 18px;
+  border-radius:14px;
+  cursor:pointer;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  font-size:14px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+  transition:.2s;
+}
+.tab:hover{border-color:var(--teal);}
+.tab.active{background:var(--teal);color:#0c1a22;border-color:var(--teal);}
+
+.panel{display:none;animation:fade .35s ease;}
+.panel.active{display:block;}
+@keyframes fade{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+
+.card{
+  background:var(--navy-card);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:18px;
+  padding:22px;
+  margin-bottom:20px;
+  box-shadow:0 6px 18px rgba(0,0,0,.25);
+}
+.card h2{margin-top:0;color:var(--teal);font-size:19px;display:flex;align-items:center;gap:8px;}
+.card h3{color:#fff;font-size:16px;margin-bottom:6px;}
+.hint{
+  background:rgba(20,200,168,.1);
+  border-inline-start:4px solid var(--teal);
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:13.5px;
+  color:#cdebe5;
+  margin:10px 0;
+}
+.warn-step{
+  background:rgba(255,184,77,.1);
+  border-inline-start:4px solid var(--warn);
+  padding:10px 14px;
+  border-radius:8px;
+  font-size:13.5px;
+  color:#ffe6bf;
+  margin:10px 0;
+}
+
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:14px;margin:16px 0;}
+.sample{
+  background:#1a2438;
+  border:2px solid transparent;
+  border-radius:14px;
+  padding:14px 10px;
+  text-align:center;
+  cursor:pointer;
+  transition:.2s;
+  user-select:none;
+}
+.sample:hover{border-color:var(--teal-dark);}
+.sample.selected{border-color:var(--teal);background:#163631;}
+.sample .emoji{font-size:34px;display:block;margin-bottom:6px;}
+.sample .name{font-weight:700;font-size:13.5px;}
+.sample .type{font-size:11px;color:var(--muted);}
+
+.controls{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0;}
+button.action{
+  background:var(--teal);
+  color:#0c1a22;
+  border:none;
+  padding:10px 22px;
+  border-radius:10px;
+  font-family:'Cairo',sans-serif;
+  font-weight:800;
+  cursor:pointer;
+  font-size:14px;
+  transition:.15s;
+}
+button.action:hover{transform:translateY(-2px);box-shadow:0 6px 14px rgba(20,200,168,.3);}
+button.action:disabled{opacity:.4;cursor:not-allowed;transform:none;}
+button.secondary{
+  background:transparent;
+  border:1px solid var(--muted);
+  color:var(--text);
+}
+
+.burner-stage{
+  position:relative;
+  height:170px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:center;
+  margin:14px 0;
+}
+.flame{
+  width:26px;height:60px;
+  background:radial-gradient(circle at 50% 80%, #4faaff, #1c6dff 40%, #0b3aa3 80%);
+  border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;
+  position:absolute;bottom:10px;
+  opacity:0;
+  transition:opacity .3s;
+  animation:flick 0.4s infinite alternate;
+}
+.flame.on{opacity:1;}
+@keyframes flick{from{transform:scaleY(1) scaleX(1);}to{transform:scaleY(1.08) scaleX(.94);}}
+.dish{
+  width:90px;height:14px;
+  background:linear-gradient(#cfd8e3,#8b97a8);
+  border-radius:50%;
+  position:absolute;bottom:62px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:22px;
+}
+.dish .sample-icon{transition:.4s;}
+.melted .sample-icon{transform:scale(.6) translateY(4px);filter:blur(1px);opacity:.7;}
+.thermo{
+  position:absolute;left:calc(50% + 70px);bottom:60px;
+  font-weight:800;color:var(--warn);font-size:14px;
+}
+
+.circuit-box{
+  display:flex;align-items:center;justify-content:center;gap:18px;
+  margin:14px 0;flex-wrap:wrap;
+}
+.bulb{
+  width:54px;height:54px;border-radius:50%;
+  background:#3a4257;
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;
+  transition:.3s;
+  border:3px solid #4a5470;
+}
+.bulb.lit{background:radial-gradient(circle,#fff7c2,#ffd23f 60%,#e8a200);box-shadow:0 0 30px 8px rgba(255,210,63,.6);border-color:#ffd23f;}
+.beaker{
+  width:80px;height:90px;
+  border:3px solid #7e8aa3;
+  border-top:none;
+  border-radius:0 0 14px 14px;
+  position:relative;
+  display:flex;align-items:flex-end;justify-content:center;
+  background:rgba(255,255,255,.03);
+}
+.liquid{width:100%;height:55%;background:rgba(120,180,255,.35);border-radius:0 0 11px 11px;}
+
+table{width:100%;border-collapse:collapse;margin-top:10px;font-size:13.5px;}
+th,td{border:1px solid rgba(255,255,255,.12);padding:9px 8px;text-align:center;}
+th{background:#16213a;color:var(--teal);}
+td input,td select{
+  width:100%;background:#101a2c;border:1px solid rgba(255,255,255,.15);
+  color:var(--text);border-radius:6px;padding:6px;font-family:'Cairo',sans-serif;font-size:12.5px;
+}
+tr:nth-child(even){background:rgba(255,255,255,.02);}
+
+.feedback{
+  margin-top:14px;padding:14px 16px;border-radius:12px;
+  font-size:14px;line-height:1.9;display:none;
+}
+.feedback.show{display:block;animation:fade .3s ease;}
+.feedback.correct{background:rgba(20,200,168,.12);border:1px solid var(--teal);}
+.feedback.info{background:rgba(86,150,255,.12);border:1px solid #5696ff;}
+
+.advanced{
+  display:none;
+  margin-top:16px;
+  background:#101a2c;
+  border:1px dashed var(--teal-dark);
+  border-radius:12px;
+  padding:16px;
+}
+.advanced.show{display:block;}
+.advanced h4{color:var(--warn);margin-top:0;font-size:15px;}
+textarea{
+  width:100%;min-height:80px;background:#0c1421;color:var(--text);
+  border:1px solid rgba(255,255,255,.15);border-radius:8px;padding:10px;
+  font-family:'Cairo',sans-serif;font-size:13.5px;resize:vertical;
+}
+.q-block{margin-bottom:14px;}
+.q-block label{display:block;font-weight:700;margin-bottom:6px;color:#dce8f5;}
+
+.demo-img{
+  font-size:60px;text-align:center;margin:10px 0;
+}
+.progress-bar{
+  height:8px;background:#101a2c;border-radius:6px;overflow:hidden;margin:8px 0 16px;
+}
+.progress-fill{height:100%;background:linear-gradient(90deg,var(--teal-dark),var(--teal));width:0%;transition:.4s;}
+
+footer{
+  text-align:center;color:var(--muted);font-size:12.5px;padding:30px 10px;
+}
+.badge-row{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:10px;}
+.badge{
+  background:#101a2c;border:1px solid rgba(20,200,168,.3);
+  padding:5px 12px;border-radius:20px;font-size:11.5px;color:var(--teal);
+}
+.summary-banner{
+  background:linear-gradient(120deg, rgba(20,200,168,.18), rgba(31,138,140,.08));
+  border:1px solid var(--teal);
+  border-radius:16px;padding:18px;margin-top:20px;
+}
+.summary-banner h3{color:var(--teal);margin-top:0;}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="brand">🧪 Fouad EduLab — مختبر فؤاد التعليمي</div>
+  <h1>المختبر الافتراضي: الخصائص الفيزيائية للمواد الأيونية والتساهمية والفلزية</h1>
+  <p class="subtitle">استكشف عمليًا (بشكل افتراضي وآمن) درجات الانصهار والتوصيل الكهربائي للمواد الصلبة، والمحاليل، والمركّبات المنصهرة — وصِل بين ما تلاحظه وبين تركيب الذرّات والروابط الكيميائية.</p>
+  <div class="level-toggle">
+    <button class="level-btn active" id="btnBasic" onclick="setLevel('basic')">المستوى الأساسي (صف 9)</button>
+    <button class="level-btn" id="btnAdv" onclick="setLevel('adv')">المستوى المتقدّم (تحليل أعمق)</button>
+  </div>
+</header>
+
+<div class="safety-bar">
+  <div class="icon">⚠️</div>
+  <div>
+    <strong>تعليمات السلامة الافتراضية — اقرأها قبل البدء:</strong>
+    <ul>
+      <li>لا تلمس كلوريد الكالسيوم الحقيقي في المختبر الفعلي — استخدم القفازات دائمًا.</li>
+      <li>لا تلمس أي جهاز كهربائي ويداك مبللتان.</li>
+      <li>يجب أن يتم تسخين المواد داخل خزانة الأبخرة في المختبر الحقيقي.</li>
+      <li>أغلق مصدر الغاز عند عدم استخدام موقد بنزن، وانتظر حتى يبرد قبل لمسه.</li>
+    </ul>
+  </div>
+</div>
+
+<main>
+  <div class="tabs">
+    <div class="tab active" onclick="showPanel('p1')">🔥 التجربة 1: درجات الانصهار</div>
+    <div class="tab" onclick="showPanel('p2')">⚡ التجربة 2: التوصيل الكهربائي (صلب ومحلول)</div>
+    <div class="tab" onclick="showPanel('p3')">🌡️ التجربة 3: التوصيل عند الانصهار</div>
+    <div class="tab" onclick="showPanel('p4')">📊 الخلاصة والتقرير</div>
+  </div>
+
+  <!-- PANEL 1: MELTING POINT -->
+  <div class="panel active" id="p1">
+    <div class="card">
+      <h2>🔥 محاكاة اختبار درجة الانصهار</h2>
+      <div class="hint">اختر مادة، ثم اضغط "تسخين لمدة دقيقتين" وراقب ماذا يحدث على موقد بنزن الافتراضي.</div>
+      <div class="warn-step">⚠️ تذكير سلامة: في المختبر الحقيقي تُستخدم شعلة زرقاء فقط، ولا تُسخَّن عينة الماء بهذه الطريقة.</div>
+
+      <div class="grid" id="meltSamples"></div>
+
+      <div class="burner-stage">
+        <div class="dish" id="dish"><span class="sample-icon" id="dishIcon">🧂</span></div>
+        <div class="flame" id="flame"></div>
+        <div class="thermo" id="thermoLabel"></div>
+      </div>
+
+      <div class="controls">
+        <button class="action" id="heatBtn" onclick="heatSample()" disabled>🔥 تسخين لمدة دقيقتين</button>
+        <button class="secondary action" onclick="resetMelt()">إعادة ضبط</button>
+      </div>
+
+      <div class="feedback" id="meltFeedback"></div>
+
+      <h3 style="margin-top:22px;">📋 جدول بيانات الانصهار</h3>
+      <table id="meltTable">
+        <thead><tr><th>المادة</th><th>هل انصهرت خلال دقيقتين؟</th><th>درجة الانصهار (مرتفعة / منخفضة)</th><th>ملاحظاتك</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="advanced" id="adv1">
+        <h4>🔬 تحليل متقدّم</h4>
+        <div class="q-block">
+          <label>1) فسّر لماذا تختلف درجة انصهار كلوريد الصوديوم (مركّب أيوني) عن الشمع (مادة تساهمية) من حيث قوة الروابط بين الجسيمات.</label>
+          <textarea placeholder="اكتب تفسيرك هنا..."></textarea>
+        </div>
+        <div class="q-block">
+          <label>2) لماذا تحتاج الرابطة الأيونية (قوى تجاذب كهروستاتيكية بين أيونات موجبة وسالبة) طاقة أكبر لكسرها مقارنة بقوى التجاذب الضعيفة بين جزيئات الشمع؟</label>
+          <textarea placeholder="اربط إجابتك بقوة الجذب بين الشحنات..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 2: CONDUCTIVITY SOLID & SOLUTION -->
+  <div class="panel" id="p2">
+    <div class="card">
+      <h2>⚡ محاكاة الدائرة الكهربائية لاختبار التوصيل</h2>
+      <div class="hint">اختر مادة صلبة أولًا لاختبارها كما هي، ثم — إن كانت قابلة للذوبان — حضّر محلولًا مائيًا واختبره أيضًا.</div>
+      <div class="warn-step">⚠️ لا تلمس الجهاز الكهربائي ويداك مبللتان. اغمس قطبَي الدائرة فقط (أطراف التمساح).</div>
+
+      <div class="grid" id="condSamples"></div>
+
+      <div class="circuit-box">
+        <div class="bulb" id="bulb1">💡</div>
+        <div style="font-size:13px;color:var(--muted);">⎓⎓⎓ دائرة الاختبار ⎓⎓⎓</div>
+        <div class="beaker" id="testVessel"><span style="font-size:30px;align-self:center;" id="vesselIcon">🧂</span></div>
+      </div>
+
+      <div class="controls">
+        <button class="action" onclick="testSolid()">⚡ اختبار التوصيل (الحالة الصلبة)</button>
+        <button class="action" onclick="testSolution()" id="dissolveBtn" disabled>💧 إذابة في الماء واختبار المحلول</button>
+        <button class="secondary action" onclick="resetCond()">إعادة ضبط</button>
+      </div>
+
+      <div class="feedback" id="condFeedback"></div>
+
+      <h3 style="margin-top:22px;">📋 جدول بيانات التوصيل الكهربائي</h3>
+      <table id="condTable">
+        <thead><tr><th>المادة</th><th>التوصيل في الحالة الصلبة</th><th>التوصيل كمحلول مائي</th><th>تصنيف المادة</th></tr></thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="advanced" id="adv2">
+        <h4>🔬 تحليل متقدّم</h4>
+        <div class="q-block">
+          <label>1) في الحالة الصلبة، الأيونات في كلوريد الصوديوم مرتبة في شبكة بلورية ثابتة. فسّر لماذا لا توصل الكهرباء رغم وجود أيونات موجبة وسالبة.</label>
+          <textarea placeholder="فكّر في حرية حركة الأيونات..."></textarea>
+        </div>
+        <div class="q-block">
+          <label>2) عند الذوبان في الماء، تنفصل الأيونات وتتحرك بحرية. كيف يفسّر ذلك التوصيل الكهربائي للمحلول؟ ولماذا لا توصل المواد التساهمية (كالشمع) محاليلها الكهرباء بنفس الطريقة؟</label>
+          <textarea placeholder="اربط إجابتك بنوع الجسيمات (أيونات مقابل جزيئات متعادلة)..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 3: MOLTEN CONDUCTIVITY DEMO -->
+  <div class="panel" id="p3">
+    <div class="card">
+      <h2>🌡️ عرض المعلّم: التوصيل الكهربائي عند صهر مركّب أيوني</h2>
+      <div class="hint">هذا عرض عملي يقوم به المعلّم فقط (بوتقة، أقطاب كربون، خزانة أبخرة) — راقب العرض الافتراضي وسجّل النتيجة.</div>
+      <div class="warn-step">⚠️ هذا الجزء للمشاهدة فقط: درجات حرارة الانصهار للمركّبات الأيونية مرتفعة جدًا، ويجب أن يتم العمل داخل خزانة الأبخرة.</div>
+
+      <div class="demo-img" id="demoIcon">⚱️</div>
+      <p style="text-align:center;color:var(--muted);font-size:13.5px;" id="demoText">المعلّم يقوم بصهر كلوريد الخارصين في بوتقة فوق موقد بنزن، مع غمس قطبَي كربون متصلَين بدائرة كهربائية ومقياس تيار.</p>
+
+      <div class="controls" style="justify-content:center;">
+        <button class="action" onclick="runMoltenDemo()" id="demoBtn">▶️ تشغيل العرض الافتراضي</button>
+        <button class="secondary action" onclick="resetDemo()">إعادة ضبط</button>
+      </div>
+
+      <div class="circuit-box">
+        <div class="bulb" id="bulb2">💡</div>
+        <div style="font-size:13px;color:var(--muted);">مقياس التيار: <span id="ammeter">0.0</span> A</div>
+      </div>
+
+      <div class="feedback" id="demoFeedback"></div>
+
+      <h3 style="margin-top:22px;">📋 سجّل نتيجة العرض</h3>
+      <table>
+        <thead><tr><th>المركّب</th><th>الحالة</th><th>هل وُصلت الكهرباء؟</th><th>ملاحظاتك</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>كلوريد الخارصين</td>
+            <td>منصهر (سائل)</td>
+            <td id="demoResultCell">—</td>
+            <td><input type="text" placeholder="اكتب ملاحظتك..."></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="advanced" id="adv3">
+        <h4>🔬 تحليل متقدّم</h4>
+        <div class="q-block">
+          <label>1) قارن بين توصيل كلوريد الخارصين المنصهر وتوصيله في الحالة الصلبة. ما الذي تغيّر على المستوى الذرّي ليسمح بمرور التيار؟</label>
+          <textarea placeholder="اكتب إجابتك..."></textarea>
+        </div>
+        <div class="q-block">
+          <label>2) الفلزات توصل الكهرباء في الحالة الصلبة والمنصهرة معًا، بخلاف المركّبات الأيونية التي توصل فقط منصهرة أو في محلول. فسّر هذا الفرق بالاستناد إلى "بحر الإلكترونات" في الرابطة الفلزية مقارنة بالشبكة الأيونية الثابتة.</label>
+          <textarea placeholder="اكتب إجابتك..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PANEL 4: SUMMARY -->
+  <div class="panel" id="p4">
+    <div class="card">
+      <h2>📊 ماذا تعلّمت؟ — الخلاصة</h2>
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <p id="progressText" style="color:var(--muted);font-size:13.5px;"></p>
+
+      <div class="summary-banner">
+        <h3>🧠 المفاهيم الأساسية</h3>
+        <ul style="line-height:2;font-size:14.5px;">
+          <li>تمتلك المركّبات الأيونية والفلزّات درجات انصهار وغليان مرتفعة نسبيًا، بينما تمتلك المواد التساهمية درجات أدنى.</li>
+          <li>المركّبات الأيونية ومعظم الفلزّات صلبة عند درجة حرارة الغرفة.</li>
+          <li>توصل المركّبات الأيونية الكهرباء عند صهرها أو في محلول مائي، لأن الأيونات تصبح حرّة الحركة.</li>
+          <li>معظم المواد التساهمية لا توصل الكهرباء لأنها مكوّنة من جزيئات متعادلة الشحنة.</li>
+          <li>توصل الفلزّات الكهرباء في الحالة الصلبة وعند الصهر بسبب بحر الإلكترونات الحرّة الحركة.</li>
+        </ul>
+      </div>
+
+      <div class="badge-row" id="badges"></div>
+
+      <h3 style="margin-top:22px;">✍️ سؤال ختامي شامل</h3>
+      <div class="q-block">
+        <label>اكتب فقرة تلخّص فيها العلاقة بين نوع الرابطة الكيميائية (أيونية / تساهمية / فلزية) وكل من درجة الانصهار والتوصيل الكهربائي، مستندًا إلى نتائج تجاربك الثلاث.</label>
+        <textarea style="min-height:120px;" placeholder="اكتب إجابتك هنا..."></textarea>
+      </div>
+      <button class="action" onclick="finalCheck()">✅ إنهاء وتسليم الملاحظات</button>
+      <div class="feedback" id="finalFeedback"></div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  🧪 Fouad EduLab — مختبر فؤاد التعليمي | مختبر افتراضي تفاعلي وفق منهج العلوم القطري — الصف التاسع، الوحدة 1
+</footer>
+
+<script>
+const materials = [
+  {id:'nacl', name:'كلوريد الصوديوم', emoji:'🧂', type:'ionic', typeLabel:'مركّب أيوني', meltsFast:false, mpLevel:'مرتفعة', solidConducts:false, solutionConducts:true, soluble:true},
+  {id:'cacl2', name:'كلوريد الكالسيوم', emoji:'🧊', type:'ionic', typeLabel:'مركّب أيوني', meltsFast:false, mpLevel:'مرتفعة', solidConducts:false, solutionConducts:true, soluble:true},
+  {id:'wax', name:'الشمع', emoji:'🕯️', type:'covalent', typeLabel:'مادة تساهمية', meltsFast:true, mpLevel:'منخفضة', solidConducts:false, solutionConducts:false, soluble:false},
+  {id:'al', name:'الألومنيوم', emoji:'🥫', type:'metallic', typeLabel:'فلز', meltsFast:false, mpLevel:'مرتفعة', solidConducts:true, solutionConducts:null, soluble:false},
+  {id:'cu', name:'النحاس', emoji:'🪙', type:'metallic', typeLabel:'فلز', meltsFast:false, mpLevel:'مرتفعة', solidConducts:true, solutionConducts:null, soluble:false},
+  {id:'water', name:'الماء', emoji:'💧', type:'covalent', typeLabel:'مادة تساهمية (لا تُسخَّن في هذه التجربة)', meltsFast:null, mpLevel:'—', solidConducts:false, solutionConducts:false, soluble:null}
+];
+
+let level = 'basic';
+let meltSelected = null;
+let condSelected = null;
+let meltLog = {};
+let condLog = {};
+let demoRun = false;
+
+function setLevel(l){
+  level = l;
+  document.getElementById('btnBasic').classList.toggle('active', l==='basic');
+  document.getElementById('btnAdv').classList.toggle('active', l==='adv');
+  document.querySelectorAll('.advanced').forEach(el=>el.classList.toggle('show', l==='adv'));
+}
+
+function showPanel(id){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(id==='p4') updateSummary();
+}
+
+// ---------- PANEL 1: MELTING ----------
+function buildMeltSamples(){
+  const grid = document.getElementById('meltSamples');
+  grid.innerHTML='';
+  materials.filter(m=>m.id!=='water').forEach(m=>{
+    const div = document.createElement('div');
+    div.className='sample';
+    div.id='melt-'+m.id;
+    div.onclick=()=>selectMelt(m.id);
+    div.innerHTML=`<span class="emoji">${m.emoji}</span><span class="name">${m.name}</span><span class="type">${m.typeLabel}</span>`;
+    grid.appendChild(div);
+  });
+}
+function selectMelt(id){
+  if(meltLog[id]) return; // already tested
+  meltSelected = id;
+  document.querySelectorAll('#meltSamples .sample').forEach(s=>s.classList.remove('selected'));
+  document.getElementById('melt-'+id).classList.add('selected');
+  const m = materials.find(x=>x.id===id);
+  document.getElementById('dishIcon').textContent = m.emoji;
+  document.getElementById('dish').classList.remove('melted');
+  document.getElementById('thermoLabel').textContent='';
+  document.getElementById('heatBtn').disabled=false;
+  document.getElementById('meltFeedback').classList.remove('show');
+}
+function heatSample(){
+  if(!meltSelected) return;
+  const m = materials.find(x=>x.id===meltSelected);
+  document.getElementById('flame').classList.add('on');
+  document.getElementById('heatBtn').disabled=true;
+  setTimeout(()=>{
+    document.getElementById('flame').classList.remove('on');
+    const dish = document.getElementById('dish');
+    const fb = document.getElementById('meltFeedback');
+    fb.classList.add('show');
+    if(m.meltsFast){
+      dish.classList.add('melted');
+      document.getElementById('thermoLabel').textContent='انصهرت ✅';
+      fb.className='feedback show correct';
+      fb.innerHTML = `🔥 <strong>${m.name}</strong> انصهرت خلال دقيقتين فقط! هذا لأنها مادة تساهمية — قوى التجاذب بين جزيئاتها ضعيفة نسبيًا، لذا تحتاج طاقة قليلة لكسرها.`;
+    } else {
+      document.getElementById('thermoLabel').textContent='لم تنصهر بعد ❌';
+      fb.className='feedback show info';
+      fb.innerHTML = `🌡️ <strong>${m.name}</strong> لم تنصهر خلال دقيقتين، لأن ${m.type==='ionic' ? 'الرابطة الأيونية قوية جدًا (تجاذب كهروستاتيكي بين أيونات موجبة وسالبة)' : 'الرابطة الفلزية قوية (بحر إلكترونات يربط الأيونات الموجبة الثابتة)'}، وتحتاج درجة حرارة مرتفعة جدًا لكسرها.`;
+    }
+    meltLog[m.id] = {melted:m.meltsFast, level:m.mpLevel};
+    updateMeltTable();
+    document.getElementById('heatBtn').disabled=true;
+  }, 1400);
+}
+function resetMelt(){
+  meltSelected=null;
+  document.getElementById('dish').classList.remove('melted');
+  document.getElementById('dishIcon').textContent='🧂';
+  document.getElementById('thermoLabel').textContent='';
+  document.getElementById('heatBtn').disabled=true;
+  document.getElementById('meltFeedback').classList.remove('show');
+}
+function updateMeltTable(){
+  const tbody = document.querySelector('#meltTable tbody');
+  tbody.innerHTML='';
+  Object.keys(meltLog).forEach(id=>{
+    const m = materials.find(x=>x.id===id);
+    const r = meltLog[id];
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${m.name}</td><td>${r.melted? 'نعم ✅':'لا ❌'}</td><td>${r.level}</td><td><input type="text" placeholder="اكتب ملاحظة..."></td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ---------- PANEL 2: CONDUCTIVITY ----------
+function buildCondSamples(){
+  const grid = document.getElementById('condSamples');
+  grid.innerHTML='';
+  materials.forEach(m=>{
+    const div = document.createElement('div');
+    div.className='sample';
+    div.id='cond-'+m.id;
+    div.onclick=()=>selectCond(m.id);
+    div.innerHTML=`<span class="emoji">${m.emoji}</span><span class="name">${m.name}</span><span class="type">${m.typeLabel}</span>`;
+    grid.appendChild(div);
+  });
+}
+function selectCond(id){
+  condSelected = id;
+  document.querySelectorAll('#condSamples .sample').forEach(s=>s.classList.remove('selected'));
+  document.getElementById('cond-'+id).classList.add('selected');
+  const m = materials.find(x=>x.id===id);
+  document.getElementById('vesselIcon').textContent = m.emoji;
+  document.getElementById('testVessel').querySelector('.liquid')?.remove();
+  document.getElementById('bulb1').classList.remove('lit');
+  document.getElementById('dissolveBtn').disabled = !m.soluble;
+  document.getElementById('condFeedback').classList.remove('show');
+}
+function testSolid(){
+  if(!condSelected) return;
+  const m = materials.find(x=>x.id===condSelected);
+  const bulb = document.getElementById('bulb1');
+  const fb = document.getElementById('condFeedback');
+  fb.classList.add('show');
+  if(m.solidConducts){
+    bulb.classList.add('lit');
+    fb.className='feedback show correct';
+    fb.innerHTML = `💡 أُضيء المصباح! <strong>${m.name}</strong> فلز، ويحتوي على "بحر إلكترونات" حرّة الحركة بين الأيونات الموجبة الثابتة، لذلك يوصل الكهرباء في الحالة الصلبة.`;
+  } else {
+    bulb.classList.remove('lit');
+    fb.className='feedback show info';
+    let reason = m.type==='ionic'
+      ? 'الأيونات في الحالة الصلبة مرتبطة بإحكام داخل شبكة بلورية ثابتة ولا يمكنها الحركة بحرية.'
+      : 'هذه مادة تساهمية لا تحتوي على أيونات أو إلكترونات حرّة الحركة.';
+    fb.innerHTML = `🚫 لم يُضِئ المصباح. <strong>${m.name}</strong> لا توصل الكهرباء في الحالة الصلبة، لأن ${reason}`;
+  }
+  if(!condLog[m.id]) condLog[m.id]={};
+  condLog[m.id].solid = m.solidConducts;
+  condLog[m.id].typeLabel = m.typeLabel;
+  updateCondTable();
+}
+function testSolution(){
+  if(!condSelected) return;
+  const m = materials.find(x=>x.id===condSelected);
+  if(!m.soluble) return;
+  const vessel = document.getElementById('testVessel');
+  const liquid = document.createElement('div');
+  liquid.className='liquid';
+  vessel.appendChild(liquid);
+  const bulb = document.getElementById('bulb1');
+  const fb = document.getElementById('condFeedback');
+  fb.classList.add('show');
+  if(m.solutionConducts){
+    bulb.classList.add('lit');
+    fb.className='feedback show correct';
+    fb.innerHTML = `💡 أُضيء المصباح من جديد! عند ذوبان <strong>${m.name}</strong> في الماء، انفصلت الأيونات الموجبة والسالبة وأصبحت حرّة الحركة في المحلول، فسمحت بمرور التيار الكهربائي.`;
+  } else {
+    bulb.classList.remove('lit');
+    fb.className='feedback show info';
+    fb.innerHTML = `🚫 المصباح لم يُضِئ. محلول <strong>${m.name}</strong> لا يحتوي على أيونات حرّة، لأنها مادة تساهمية تذوب كجزيئات متعادلة الشحنة.`;
+  }
+  if(!condLog[m.id]) condLog[m.id]={};
+  condLog[m.id].solution = m.solutionConducts;
+  condLog[m.id].typeLabel = m.typeLabel;
+  updateCondTable();
+}
+function resetCond(){
+  condSelected=null;
+  document.getElementById('vesselIcon').textContent='🧂';
+  document.getElementById('testVessel').querySelector('.liquid')?.remove();
+  document.getElementById('bulb1').classList.remove('lit');
+  document.getElementById('dissolveBtn').disabled=true;
+  document.getElementById('condFeedback').classList.remove('show');
+}
+function updateCondTable(){
+  const tbody = document.querySelector('#condTable tbody');
+  tbody.innerHTML='';
+  Object.keys(condLog).forEach(id=>{
+    const m = materials.find(x=>x.id===id);
+    const r = condLog[id];
+    const solidTxt = r.solid===undefined ? '—' : (r.solid? 'نعم ✅':'لا ❌');
+    const solTxt = r.solution===undefined ? (m.soluble===false? 'غير منطبق':'—') : (r.solution? 'نعم ✅':'لا ❌');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `<td>${m.name}</td><td>${solidTxt}</td><td>${solTxt}</td><td>${r.typeLabel}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+// ---------- PANEL 3: TEACHER DEMO ----------
+function runMoltenDemo(){
+  if(demoRun) return;
+  demoRun = true;
+  document.getElementById('demoBtn').disabled=true;
+  document.getElementById('demoIcon').textContent='🔥⚱️';
+  document.getElementById('demoText').textContent='جارٍ تسخين كلوريد الخارصين حتى الانصهار داخل خزانة الأبخرة...';
+  setTimeout(()=>{
+    document.getElementById('demoIcon').textContent='🟠⚱️';
+    document.getElementById('demoText').textContent='كلوريد الخارصين أصبح سائلًا منصهرًا، يتم الآن غمس قطبَي الكربون...';
+    setTimeout(()=>{
+      document.getElementById('bulb2').classList.add('lit');
+      document.getElementById('ammeter').textContent = '1.8';
+      document.getElementById('demoResultCell').textContent='نعم ✅';
+      const fb = document.getElementById('demoFeedback');
+      fb.classList.add('show');
+      fb.className='feedback show correct';
+      fb.innerHTML = `⚡ أُضيء المصباح وسجّل مقياس التيار قراءة! في الحالة المنصهرة، تتحرر أيونات الخارصين (Zn²⁺) والكلوريد (Cl⁻) من الشبكة البلورية الثابتة وتصبح حرّة الحركة، فتوصل التيار الكهربائي تمامًا كما حدث مع محاليل المركّبات الأيونية.`;
+    }, 1300);
+  }, 1300);
+}
+function resetDemo(){
+  demoRun=false;
+  document.getElementById('demoBtn').disabled=false;
+  document.getElementById('demoIcon').textContent='⚱️';
+  document.getElementById('demoText').textContent='المعلّم يقوم بصهر كلوريد الخارصين في بوتقة فوق موقد بنزن، مع غمس قطبَي كربون متصلَين بدائرة كهربائية ومقياس تيار.';
+  document.getElementById('bulb2').classList.remove('lit');
+  document.getElementById('ammeter').textContent='0.0';
+  document.getElementById('demoResultCell').textContent='—';
+  document.getElementById('demoFeedback').classList.remove('show');
+}
+
+// ---------- PANEL 4: SUMMARY ----------
+function updateSummary(){
+  const meltCount = Object.keys(meltLog).length;
+  const condCount = Object.keys(condLog).length;
+  const total = 5 + (demoRun?1:0); // 5 meltable + demo
+  let done = meltCount + (demoRun?1:0);
+  let progress = Math.min(100, Math.round((meltCount/5)*40 + (condCount/6)*40 + (demoRun?20:0)));
+  document.getElementById('progressFill').style.width = progress+'%';
+  document.getElementById('progressText').textContent = `أكملت ${progress}% من خطوات النشاط (الانصهار، التوصيل، عرض الانصهار).`;
+
+  const badges = document.getElementById('badges');
+  badges.innerHTML='';
+  if(meltCount>=5) badges.innerHTML += `<span class="badge">🏅 خبير الانصهار</span>`;
+  if(condCount>=4) badges.innerHTML += `<span class="badge">🏅 خبير التوصيل</span>`;
+  if(demoRun) badges.innerHTML += `<span class="badge">🏅 شاهدت العرض العملي</span>`;
+  if(progress===100) badges.innerHTML += `<span class="badge">🌟 أكملت المختبر الافتراضي بالكامل</span>`;
+}
+function finalCheck(){
+  const fb = document.getElementById('finalFeedback');
+  fb.classList.add('show');
+  fb.className='feedback show correct';
+  fb.innerHTML = `✅ أحسنت! تم تسجيل ملاحظاتك. راجع جدول البيانات في كل تجربة للتأكد من اكتمالها، ثم شارك تقريرك مع معلّمك عبر Fouad EduLab.`;
+  updateSummary();
+}
+
+buildMeltSamples();
+buildCondSamples();
+setLevel('basic');
+</script>
+</body>
+</html>
